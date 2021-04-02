@@ -2,7 +2,6 @@ import express from 'express';
 import morgan from 'morgan';
 import { getDatabase } from './config/mongo';
 import router from './api/index';
-import { getNextSequence } from './dao/counter';
 
 const app = express();
 app.set('port', process.env.PORT || 3000);

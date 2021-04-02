@@ -32,7 +32,10 @@ async function createMail(req: Request, res: Response) {
     const add: Reward = { type: reward.type, degree: reward.degree };
     rewardArr.push(add);
   }
-  const log: WriterLog = { writer: writer, accessedAt: new Date() };
+  const log: WriterLog = {
+    writer: writer,
+    accessedAt: new Date(),
+  };
   const mail: CreateAdminMailDto = {
     title: title,
     content: content,
@@ -77,7 +80,10 @@ async function modifyMail(req: Request, res: Response) {
     const add: Reward = { type: reward.type, degree: reward.degree };
     rewardArr.push(add);
   }
-  const log: WriterLog = { writer: writer, accessedAt: new Date() };
+  const log: WriterLog = {
+    writer: writer,
+    accessedAt: new Date(),
+  };
   const mail: ModifyAdminMailDto = {
     content: content,
     rewards: rewardArr,

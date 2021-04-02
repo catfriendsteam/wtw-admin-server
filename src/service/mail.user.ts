@@ -1,3 +1,4 @@
+import schedule from 'node-schedule';
 import * as MailUserDao from '../dao/mail.user';
 import {
   CreateUserMailDto,
@@ -9,7 +10,19 @@ export async function createMail(mail: CreateUserMailDto) {
   const cmail = new UserMail(mail.mailId, mail.group, mail.sendDate, [
     mail.log,
   ]);
-  return (await MailUserDao.insert(cmail)) ? cmail : false;
+  const resultMail = await MailUserDao.insert(cmail);
+  if (!resultMail) {
+    return false;
+  } else {
+    schedule.scheduleJob(cmail._id.toString(), cmail.sendDate, () => {
+      console.log(`send mail : ${cmail._id}-${cmail.mailId}-${new Date()}`);
+      const updateMail = MailUserDao.updateForSend(cmail._id) //스케줄 해제
+        ? schedule.cancelJob(cmail._id.toString())
+        : false;
+      return updateMail;
+    });
+    return cmail;
+  }
 }
 export function getMailById(id: number) {
   return MailUserDao.find(id);

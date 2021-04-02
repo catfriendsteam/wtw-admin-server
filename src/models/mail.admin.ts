@@ -1,11 +1,13 @@
 import { DateLog, WriterLog } from './common';
-
 export class AdminMail {
   _id: number = 0;
   title: string;
   content: string;
   rewards: Array<Reward>;
-  date: DateLog = { createdAt: new Date(), updatedAt: new Date() };
+  date: DateLog = {
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
   logs: Array<WriterLog>;
   constructor(
     title: string,

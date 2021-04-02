@@ -2,7 +2,10 @@ import { WriterLog, DateLog } from './common';
 export class UserMail {
   _id: number = 0;
   mailId: number;
-  date: DateLog = { createdAt: new Date(), updatedAt: new Date() };
+  date: DateLog = {
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
   logs: Array<WriterLog>;
   group: string; // TODO group type 만들기
   sendDate: Date;

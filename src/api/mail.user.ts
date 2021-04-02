@@ -84,3 +84,5 @@ router.get('/', getMail);
 router.post('/', scheduledMail);
 router.put('/', modifyMail);
 router.delete('/', removeMail);
+
+export { router as mailUserRouter };

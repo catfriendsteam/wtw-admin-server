@@ -10,7 +10,7 @@ export async function insert(mail: UserMail) {
     mailCollection
   );
   mail._id = await getNextSequence(mailCollection);
-  const doc = await collection.insertOne(mail);
+  const doc = await collection.insertOne(mail); //adminmail 있는지 확인하는 작업 필요
   return doc.insertedCount;
 }
 
@@ -36,4 +36,15 @@ export async function deleteMail(mailId: number) {
   );
   const doc = await collection.findOneAndDelete({ _id: mailId });
   return doc.ok;
+}
+
+export async function updateForSend(mailId: number) {
+  const collection: Collection<UserMail> = (await db).collection(
+    mailCollection
+  );
+  const doc = await collection.findOneAndUpdate(
+    { _id: mailId },
+    { $set: { isSend: true } }
+  );
+  return doc.value;
 }
