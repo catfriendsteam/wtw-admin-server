@@ -16,7 +16,6 @@ app.use('/api', router);
 export const db = getDatabase();
 
 app.get('/', (req, res) => {
-  getNextSequence(`users`);
   res.send('Hello World!');
 });
 export default app;
