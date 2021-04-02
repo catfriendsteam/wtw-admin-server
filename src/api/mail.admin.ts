@@ -2,10 +2,10 @@ import express, { Request, Response } from 'express';
 import * as yup from 'yup';
 import {
   Reward,
-  Log,
   CreateAdminMailDto,
   ModifyAdminMailDto,
 } from '../models/mail.admin';
+import { WriterLog } from '../models/common';
 import * as mailAdminService from '../service/mail.admin';
 
 const createMailSchema = yup.object({
@@ -32,7 +32,7 @@ async function createMail(req: Request, res: Response) {
     const add: Reward = { type: reward.type, degree: reward.degree };
     rewardArr.push(add);
   }
-  const log: Log = { writer: writer, accessedAt: new Date() };
+  const log: WriterLog = { writer: writer, accessedAt: new Date() };
   const mail: CreateAdminMailDto = {
     title: title,
     content: content,
@@ -77,7 +77,7 @@ async function modifyMail(req: Request, res: Response) {
     const add: Reward = { type: reward.type, degree: reward.degree };
     rewardArr.push(add);
   }
-  const log: Log = { writer: writer, accessedAt: new Date() };
+  const log: WriterLog = { writer: writer, accessedAt: new Date() };
   const mail: ModifyAdminMailDto = {
     content: content,
     rewards: rewardArr,

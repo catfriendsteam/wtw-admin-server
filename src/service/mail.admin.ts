@@ -29,7 +29,7 @@ export async function updateMailById(id: number, mail: ModifyAdminMailDto) {
     oldMail.logs.concat(mail.log)
   );
   cmail._id = id;
-  cmail.createdAt = oldMail.createdAt;
+  cmail.date.createdAt = oldMail.date.createdAt;
   return (await MailAdminDao.update(cmail)) ? cmail : false;
 }
 

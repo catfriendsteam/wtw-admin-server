@@ -1,16 +1,17 @@
+import { DateLog, WriterLog } from './common';
+
 export class AdminMail {
   _id: number = 0;
   title: string;
   content: string;
   rewards: Array<Reward>;
-  createdAt: Date = new Date();
-  updatedAt: Date = new Date();
-  logs: Array<Log> = [];
+  date: DateLog = { createdAt: new Date(), updatedAt: new Date() };
+  logs: Array<WriterLog> = [];
   constructor(
     title: string,
     content: string,
     rewards: Array<Reward> = [],
-    logs: Array<Log>
+    logs: Array<WriterLog>
   ) {
     this.title = title;
     this.content = content;
@@ -47,19 +48,14 @@ const REWARD_TYPE = {
 } as const;
 type RewardType = typeof REWARD_TYPE[keyof typeof REWARD_TYPE];
 
-export interface Log {
-  writer: string;
-  accessedAt: Date;
-}
-
 export interface CreateAdminMailDto {
   title: string;
   content: string;
   rewards?: Array<Reward>;
-  log: Log;
+  log: WriterLog;
 }
 export interface ModifyAdminMailDto {
   content: string;
   rewards?: Array<Reward>;
-  log: Log;
+  log: WriterLog;
 }
