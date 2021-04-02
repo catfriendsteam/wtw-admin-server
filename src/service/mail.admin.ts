@@ -1,4 +1,3 @@
-import { getNextSequence } from '../dao/counter';
 import * as MailAdminDao from '../dao/mail.admin';
 import {
   AdminMail,

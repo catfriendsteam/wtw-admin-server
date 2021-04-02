@@ -6,7 +6,7 @@ import {
   ModifyAdminMailDto,
 } from '../models/mail.admin';
 import { WriterLog } from '../models/common';
-import * as mailAdminService from '../service/mail.admin';
+import * as MailAdminService from '../service/mail.admin';
 
 const createMailSchema = yup.object({
   title: yup.string().required(),
@@ -39,7 +39,7 @@ async function createMail(req: Request, res: Response) {
     rewards: rewardArr,
     log: log,
   };
-  const resultMail = await mailAdminService.createMail(mail);
+  const resultMail = await MailAdminService.createMail(mail);
   return resultMail
     ? res.status(201).json(resultMail)
     : res.status(400).json(null);
@@ -51,7 +51,7 @@ const searchMailSchema = yup.number().required();
 
 async function getMail(req: Request, res: Response) {
   const _id = searchMailSchema.validateSync(req.query.id);
-  const mail = await mailAdminService.getMailById(_id);
+  const mail = await MailAdminService.getMailById(_id);
   return mail ? res.status(200).json(mail) : res.status(404).json(null);
 }
 
@@ -83,15 +83,15 @@ async function modifyMail(req: Request, res: Response) {
     rewards: rewardArr,
     log: log,
   };
-  const resultMail = await mailAdminService.updateMailById(_id, mail);
+  const resultMail = await MailAdminService.updateMailById(_id, mail);
   return resultMail
-    ? res.status(201).json(resultMail)
+    ? res.status(200).json(resultMail)
     : res.status(400).json(null);
 }
 
 async function removeMail(req: Request, res: Response) {
   const _id = searchMailSchema.validateSync(req.query.id);
-  return (await mailAdminService.deleteMailById(_id))
+  return (await MailAdminService.deleteMailById(_id))
     ? res.status(204).json(null)
     : res.status(400).json(null);
 }

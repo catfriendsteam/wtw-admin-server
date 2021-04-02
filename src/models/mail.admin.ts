@@ -6,7 +6,7 @@ export class AdminMail {
   content: string;
   rewards: Array<Reward>;
   date: DateLog = { createdAt: new Date(), updatedAt: new Date() };
-  logs: Array<WriterLog> = [];
+  logs: Array<WriterLog>;
   constructor(
     title: string,
     content: string,
