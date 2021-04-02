@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import * as yup from 'yup';
 import {
-  AdminMail,
   Reward,
   Log,
   CreateAdminMailDto,
