@@ -1,5 +1,4 @@
 import * as admin from 'firebase-admin';
-// import { serviceAccount } from './firebaseConfig';
 import { firebase } from '../vars';
 
 const serviceAccount = require(firebase);
