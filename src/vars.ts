@@ -12,6 +12,7 @@ export const {
   mongoPass,
   adminDb,
   gameDb,
+  firebase,
 } = yup
   .object({
     mongoHost: yup.string().default(`127.0.0.1`),
@@ -20,5 +21,6 @@ export const {
     mongoPass: yup.string(),
     adminDb: yup.string().required(),
     gameDb: yup.string().required(),
+    firebase: yup.string().required(),
   })
   .validateSync(process.env);
