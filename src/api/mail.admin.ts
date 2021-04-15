@@ -4,6 +4,7 @@ import {
   Reward,
   CreateAdminMailDto,
   ModifyAdminMailDto,
+  RewardType,
 } from '../models/mail.admin';
 import { WriterLog } from '../models/common';
 import * as MailAdminService from '../service/mail.admin';
@@ -15,7 +16,8 @@ const createMailSchema = yup.object({
     .array()
     .of(
       yup.object({
-        type: yup.string().required(), //oneOf 속성 추가하기
+        // type: yup.string().required(), //oneOf 속성 추가하기
+        type: yup.mixed<RewardType>().required(),
         degree: yup.number().default(0),
       })
     )
@@ -64,7 +66,8 @@ const modifyMailSchema = yup.object({
     .array()
     .of(
       yup.object({
-        type: yup.string().required(), //oneOf 속성 추가하기
+        // type: yup.string().required(), //oneOf 속성 추가하기
+        type: yup.mixed<RewardType>().required(),
         degree: yup.number().default(0),
       })
     )

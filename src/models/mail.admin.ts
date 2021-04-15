@@ -23,32 +23,55 @@ export class AdminMail {
 }
 
 export interface Reward {
-  type: string; //RewardType;
+  type: RewardType;
   degree: number;
 }
 
-const REWARD_TYPE = {
-  MAIL: 'notice',
-  DIA: 'dia',
-  MONEY: 'money',
-  HEART: 'heart',
-  NYANCOIN: 'nyancoin',
-  FRIENDSHIP: 'friendship',
-  NYANTICKET: 'nyanticket',
-  NYANPAE: 'nyanpae',
-  JOKBO: 'jokbo',
-  STAMINADRINK: 'staminadrink',
-  RODANDBALL: 'rodandball',
-  DAILY_7: 'daily_7',
-  DAILY_30: 'daily_30',
-  LIMIT_1: 'limit_1',
-  LIMIT_2: 'limit_2',
-  BUFF_1: 'buff_1',
-  BUFF_2: 'buff_2',
-  BUFF_3: 'buff_3',
-  BOX_100: 'box_100',
-} as const;
-type RewardType = typeof REWARD_TYPE[keyof typeof REWARD_TYPE];
+export enum RewardType {
+  Money,
+  Dia,
+  Heart,
+  NyanCoin,
+  FriendShip,
+  NyanTicket,
+  NyanPae,
+  Jokbo,
+  StaminaDrink,
+  RodAndBall,
+  Mail, //공지
+  OpenMail,
+  Daily_7,
+  Daily_30,
+  Limit_1,
+  Limit_2,
+  Buff_1,
+  Buff_2,
+  Buff_3,
+  Box_100,
+}
+
+// const REWARD_TYPE = {
+//   MAIL: 'notice',
+//   DIA: 'dia',
+//   MONEY: 'money',
+//   HEART: 'heart',
+//   NYANCOIN: 'nyancoin',
+//   FRIENDSHIP: 'friendship',
+//   NYANTICKET: 'nyanticket',
+//   NYANPAE: 'nyanpae',
+//   JOKBO: 'jokbo',
+//   STAMINADRINK: 'staminadrink',
+//   RODANDBALL: 'rodandball',
+//   DAILY_7: 'daily_7',
+//   DAILY_30: 'daily_30',
+//   LIMIT_1: 'limit_1',
+//   LIMIT_2: 'limit_2',
+//   BUFF_1: 'buff_1',
+//   BUFF_2: 'buff_2',
+//   BUFF_3: 'buff_3',
+//   BOX_100: 'box_100',
+// } as const;
+// type RewardType = typeof REWARD_TYPE[keyof typeof REWARD_TYPE];
 
 export interface CreateAdminMailDto {
   title: string;
