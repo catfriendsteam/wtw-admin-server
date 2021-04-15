@@ -1,4 +1,4 @@
-import { db } from '../app';
+import { dbAdmin } from '../app';
 import { Collection } from 'mongodb';
 import { getNextSequence } from './counter';
 import { UserMail } from '../models/mail.user';
@@ -6,16 +6,16 @@ import { UserMail } from '../models/mail.user';
 const mailCollection = `mails-user`;
 
 export async function insert(mail: UserMail) {
-  const collection: Collection<UserMail> = (await db).collection(
+  const collection: Collection<UserMail> = (await dbAdmin).collection(
     mailCollection
   );
-  mail._id = await getNextSequence(mailCollection);
+  mail._id = await getNextSequence(dbAdmin, mailCollection);
   const doc = await collection.insertOne(mail); //adminmail 있는지 확인하는 작업 필요
   return doc.insertedCount;
 }
 
 export async function find(_id: number) {
-  const collection: Collection<UserMail> = (await db).collection(
+  const collection: Collection<UserMail> = (await dbAdmin).collection(
     mailCollection
   );
   const doc = await collection.findOne({ _id: _id });
@@ -23,7 +23,7 @@ export async function find(_id: number) {
 }
 
 export async function update(mail: UserMail) {
-  const collection: Collection<UserMail> = (await db).collection(
+  const collection: Collection<UserMail> = (await dbAdmin).collection(
     mailCollection
   );
   const doc = await collection.findOneAndReplace({ _id: mail._id }, mail);
@@ -31,7 +31,7 @@ export async function update(mail: UserMail) {
 }
 
 export async function deleteMail(mailId: number) {
-  const collection: Collection<UserMail> = (await db).collection(
+  const collection: Collection<UserMail> = (await dbAdmin).collection(
     mailCollection
   );
   const doc = await collection.findOneAndDelete({ _id: mailId });
@@ -39,7 +39,7 @@ export async function deleteMail(mailId: number) {
 }
 
 export async function updateForSend(mailId: number) {
-  const collection: Collection<UserMail> = (await db).collection(
+  const collection: Collection<UserMail> = (await dbAdmin).collection(
     mailCollection
   );
   const doc = await collection.findOneAndUpdate(

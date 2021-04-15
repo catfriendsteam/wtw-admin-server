@@ -1,12 +1,16 @@
 import express, { Request, Response } from 'express';
 import * as yup from 'yup';
 import { WriterLog } from '../models/common';
-import { CreateUserMailDto, ModifyUserMailDto } from '../models/mail.user';
+import {
+  CreateUserMailDto,
+  ModifyUserMailDto,
+  GroupType,
+} from '../models/mail.user';
 import * as MailUserService from '../service/mail.user';
 
 const scheduledMailSchema = yup.object({
   mailId: yup.number().required(),
-  group: yup.string().required(), //oneOf 구현하기
+  group: yup.mixed<GroupType>().required(), //oneOf 구현하기
   now: yup.date().default(() => new Date()),
   sendDate: yup
     .date()
@@ -45,7 +49,7 @@ async function getMail(req: Request, res: Response) {
 }
 
 const modifyMailSchema = yup.object({
-  group: yup.string().required(), //oneOf 구현하기
+  group: yup.mixed<GroupType>().required(), //yup.string().required(), //oneOf 구현하기
   now: yup.date().default(() => new Date()),
   sendDate: yup
     .date()
@@ -53,6 +57,7 @@ const modifyMailSchema = yup.object({
     .required(),
   writer: yup.string().required(),
 });
+
 async function modifyMail(req: Request, res: Response) {
   const _id = searchMailSchema.validateSync(req.query.id);
   const { group, sendDate, writer } = modifyMailSchema.validateSync(req.body);
@@ -74,7 +79,7 @@ async function modifyMail(req: Request, res: Response) {
 async function removeMail(req: Request, res: Response) {
   const _id = searchMailSchema.validateSync(req.query.id);
   return (await MailUserService.deleteMailById(_id))
-    ? res.status(204)
+    ? res.status(204).json({})
     : res.status(400).json(null);
 }
 

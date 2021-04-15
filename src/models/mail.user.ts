@@ -7,13 +7,13 @@ export class UserMail {
     updatedAt: new Date(),
   };
   logs: Array<WriterLog>;
-  group: string; // TODO group type 만들기
+  group: GroupType; // TODO group type 만들기
   sendDate: Date;
   isSend: boolean = false;
 
   constructor(
     mailId: number,
-    group: string,
+    group: GroupType,
     sendDate: Date,
     logs: Array<WriterLog>
   ) {
@@ -24,15 +24,23 @@ export class UserMail {
   }
 }
 
+// export const GROUP = ['All', 'Android', 'iOS'] as const;
+// export type GroupType = typeof GROUP;
+export enum GroupType {
+  All,
+  Android,
+  iOS,
+}
+
 export interface CreateUserMailDto {
   mailId: number;
-  group: string;
+  group: GroupType;
   sendDate: Date;
   log: WriterLog;
 }
 
 export interface ModifyUserMailDto {
-  group: string;
+  group: GroupType;
   sendDate: Date;
   log: WriterLog;
 }
