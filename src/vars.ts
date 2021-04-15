@@ -5,12 +5,20 @@ dotenv.config({
   path: process.env.NODE_ENV === 'production' ? undefined : '.env',
 });
 
-export const { mongoHost, mongoPort, mongoUser, mongoPass, mongoDb } = yup
+export const {
+  mongoHost,
+  mongoPort,
+  mongoUser,
+  mongoPass,
+  adminDb,
+  gameDb,
+} = yup
   .object({
     mongoHost: yup.string().default(`127.0.0.1`),
     mongoPort: yup.number().integer().default(27017),
     mongoUser: yup.string(),
     mongoPass: yup.string(),
-    mongoDb: yup.string(),
+    adminDb: yup.string().required(),
+    gameDb: yup.string().required(),
   })
   .validateSync(process.env);

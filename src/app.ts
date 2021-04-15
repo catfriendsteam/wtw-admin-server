@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import { getDatabase } from './config/mongo';
+import { adminDb, gameDb } from './vars';
 import router from './api/index';
 
 const app = express();
@@ -12,7 +13,8 @@ app.use(morgan('common'));
 //apis
 app.use('/api', router);
 //db
-export const db = getDatabase();
+export const dbAdmin = getDatabase(adminDb);
+export const dbGame = getDatabase(gameDb);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
