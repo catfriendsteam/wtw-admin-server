@@ -7,6 +7,28 @@ import {
 } from '../models/mail.user';
 import * as GameService from './mail.game';
 import * as AdminService from './mail.admin';
+import { AdminMail } from '../models/mail.admin';
+
+function scheduleMail(userMail: UserMail, adminMail: AdminMail) {
+  const job = schedule.scheduleJob(
+    userMail._id.toString(),
+    userMail.sendDate,
+    () => {
+      console.log(
+        `send mail : ${userMail._id}-${userMail.mailId}-${new Date()}`
+      );
+      const result = GameService.sendMail(adminMail, userMail);
+      if (!result) {
+        return false;
+      }
+      const updateMail = MailUserDao.updateForSend(userMail._id)
+        ? schedule.cancelJob(userMail._id.toString())
+        : false;
+      return updateMail;
+    }
+  );
+  return job;
+}
 
 export async function createMail(mail: CreateUserMailDto) {
   const cmail = new UserMail(mail.mailId, mail.group, mail.sendDate, [
@@ -17,17 +39,7 @@ export async function createMail(mail: CreateUserMailDto) {
   if (!resultMail || !adminMail) {
     return null;
   } else {
-    schedule.scheduleJob(cmail._id.toString(), cmail.sendDate, () => {
-      console.log(`send mail : ${cmail._id}-${cmail.mailId}-${new Date()}`);
-      const result = GameService.sendMail(adminMail, cmail);
-      if (!result) {
-        return false;
-      }
-      const updateMail = MailUserDao.updateForSend(cmail._id) //스케줄 해제
-        ? schedule.cancelJob(cmail._id.toString())
-        : false;
-      return updateMail;
-    });
+    const result = scheduleMail(cmail, adminMail);
     return cmail;
   }
 }
@@ -47,7 +59,15 @@ export async function updateMailById(id: number, mail: ModifyUserMailDto) {
   );
   cmail._id = id;
   cmail.date.createdAt = oldMail.date.createdAt;
-  return (await MailUserDao.update(cmail)) ? cmail : false;
+  const resultMail = await MailUserDao.update(cmail);
+  const adminMail = await AdminService.getMailById(cmail.mailId);
+  if (!resultMail || !adminMail) {
+    return null;
+  } else {
+    schedule.cancelJob(resultMail._id.toString());
+    const result = scheduleMail(cmail, adminMail);
+    return cmail;
+  }
 }
 export function deleteMailById(id: number) {
   return MailUserDao.deleteMail(id);
