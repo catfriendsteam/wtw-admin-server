@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import * as yup from 'yup';
-import { User } from '../models/user';
+import { UserDto, User } from '../models/user';
 import * as userService from '../service/user';
 
 const userSchema = yup.object({
@@ -10,25 +10,53 @@ const userSchema = yup.object({
 });
 async function register(req: Request, res: Response) {
   const { email, password, username } = await userSchema.validateSync(req.body);
-  const user = new User(email, password, username);
-  return (await userService.createUser(user))
-    ? res.status(201).json(user)
-    : res.status(400).json(null);
+  return (await userService.createUser(email, password, username))
+    ? res.status(201).json({ username: username })
+    : res.status(400).json({});
 }
 
-function getUsers() {}
+const loginSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
+});
 
-function getUser() {}
+async function login(req: Request, res: Response) {
+  const { email, password } = await loginSchema.validateSync(req.body);
+  const user = await userService.getUser(email, password);
+  return user ? res.status(200).json({ user: user }) : res.status(400).json({});
+}
 
-function updateUser() {}
+const modifyUserSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().notRequired().default(''),
+  confirmPassword: yup.string().notRequired().default(''),
+  username: yup.string().max(20).notRequired().default(''),
+  // TODO: permission oneof 로 추가
+});
 
-function deleteUser() {}
+async function modifyUser(req: Request, res: Response) {
+  const {
+    email,
+    password,
+    confirmPassword,
+    username,
+  } = await modifyUserSchema.validateSync(req.body);
+  return (await userService.updateUser(
+    email,
+    password,
+    confirmPassword,
+    username
+  ))
+    ? res.status(200).json({ email: email })
+    : res.status(400).json({});
+}
+
+function dropOut() {}
 
 const router = express.Router();
-router.get('/list', getUsers);
-router.get('/', getUser);
 router.post('/', register);
-router.put('/', updateUser);
-router.delete('/', deleteUser);
+router.post('/login', login);
+router.put('/', modifyUser);
+router.delete('/', dropOut);
 
 export { router as userRouter };

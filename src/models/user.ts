@@ -3,14 +3,18 @@ export class User {
   email: string;
   password: string;
   username: string;
-  constructor(email: string, password: string, username: string) {
-    this.email = email;
-    this.password = password;
-    this.username = username;
+  permission: Permission;
+  constructor(user: UserDto) {
+    this.email = user.email;
+    this.password = user.password;
+    this.username = user.username;
+    this.permission = 'NONE';
   }
 }
-export interface IUser {
+export interface UserDto {
   email: string;
   password: string;
   username: string;
 }
+
+export type Permission = 'NONE' | 'READONLY' | 'ADMIN';

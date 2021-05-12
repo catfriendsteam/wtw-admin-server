@@ -1,11 +1,9 @@
 import { Router } from 'express';
-import { mailAdminRouter } from './mail.admin';
-import { mailUserRouter } from './mail.user';
 import { userRouter } from './user';
+import { mailRouter } from './mail';
 
 const router = Router();
-router.use('/mail/admin', mailAdminRouter);
-router.use('/mail/user', mailUserRouter);
 router.use('/user', userRouter);
+router.use('/mail', mailRouter);
 
 export default router;
