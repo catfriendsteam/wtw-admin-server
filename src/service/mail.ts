@@ -49,13 +49,7 @@ export function getList(page: number) {
    */
 }
 
-export function delete_(_id: number) {
-  console.log(`service1`);
-  const result = MailDao.delete_(_id);
-  console.log(`service2 ${result}`);
-  return result;
-}
-
+// 메일 스케줄 (예약) - 보낸 후 스케줄 삭제
 export function scheduleMail(
   mid: number,
   title: string,
@@ -77,10 +71,37 @@ export function scheduleMail(
         logger.info(
           `JOB /mail | send mail users-${targets.length}  : ${jobName}`
         );
-        return isUpdate ? schedule.cancelJob(jobName) : false;
+        if (isUpdate) {
+          MailDao.updateFieldIsSend(mid);
+          schedule.cancelJob(jobName);
+        }
       }
     });
   } catch (e) {
     logger.error(e);
   }
+}
+
+export function updateMail(_id: number) {}
+
+// 메일 삭제 및 스케줄 삭제
+export async function deleteAndCancelMailSchedule(_id: number) {
+  const mail = await MailDao.find(_id);
+  const jobName = `${mail._id}-${mail.title}`;
+  if (!mail.isSend) {
+    // 예약 취소 가능
+    const result = schedule.cancelJob(jobName);
+    if (!result) {
+      logger.error(
+        `[SCHEDULE] Failed cancel JOB ${jobName}: There is no registered schedule.`
+      );
+    } else {
+      MailDao.delete_(_id);
+      logger.info(`[SCHEDULE] Success cancel JOB ${jobName}`);
+    }
+    return result;
+  }
+  // 예약 취소 불가능 & 메일 삭제도 불가능
+  logger.info(`[SCHEDULE] This mail has already been sent ${jobName}`);
+  return false;
 }

@@ -69,15 +69,24 @@ async function getMail(req: Request, res: Response) {
 
 function getMailList(req: Request, res: Response) {}
 
-function modifyMail(req: Request, res: Response) {}
+function modifyMail(req: Request, res: Response) {
+  const _id = parseInt(req.params._id);
+}
 
 async function removeMail(req: Request, res: Response) {
   const _id = parseInt(req.params._id);
   //   const auth = req.session.~ 권한 시 삭제 가능 구현하기
-  const result = await MailService.delete_(_id);
-  return !!result
-    ? res.status(204).json({})
-    : res.status(400).json({ success: false });
+  try {
+    const result = await MailService.deleteAndCancelMailSchedule(_id);
+    return result
+      ? res.status(204).json({})
+      : res.status(400).json({ success: false });
+  } catch (e) {
+    logger.error(
+      `[DB] Failed delete mail id: ${_id}. Check if there is an e-mail.`
+    );
+    return res.status(400).json({ success: false });
+  }
 }
 
 const router = express.Router();
