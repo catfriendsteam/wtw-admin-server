@@ -22,10 +22,21 @@ export async function find(_id: number) {
   return doc;
 }
 
+export async function updateFieldIsSend(_id: number) {
+  const collection: Collection<Mail> = (await dbAdmin).collection(
+    mailCollection
+  );
+  const doc = await collection.updateOne(
+    { _id: _id },
+    { $set: { isSend: true } }
+  );
+  return doc.modifiedCount;
+}
+
 export async function delete_(_id: number) {
   const collection: Collection<Mail> = (await dbAdmin).collection(
     mailCollection
   );
   const doc = await collection.findOneAndDelete({ _id: _id });
-  return doc.ok;
+  return doc.value;
 }
