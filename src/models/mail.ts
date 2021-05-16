@@ -8,6 +8,7 @@ class Mail {
   content: string;
   rewards: Reward[];
   date: DateLog;
+  target: string[];
   logs: WriterLog[];
   admin: AdminInfo;
   user: UserInfo;
@@ -15,12 +16,16 @@ class Mail {
     title: string,
     content: string,
     rewards: Reward[],
-    sendDate: Date
+    sendDate: Date,
+    target: string[],
+    logs: WriterLog[]
   ) {
     this._id = 0;
     this.title = title;
     this.content = content;
     this.rewards = rewards;
+    this.target = target;
+    this.logs = logs;
     this.admin = new AdminInfo(sendDate);
     this.user = new UserInfo(sendDate);
   }

@@ -34,10 +34,3 @@ export interface GameMail {
   read: boolean;
   delete: boolean;
 }
-
-export interface SendUserMailDto {
-  title: string;
-  content: string;
-  rewards: Array<Reward>;
-  receivedTime: Date;
-}
